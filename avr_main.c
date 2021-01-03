@@ -18,6 +18,7 @@
 #include <avr/interrupt.h>
 #include <avr/cpufunc.h>
 #include <util/delay.h>
+#include <avr/sleep.h>
 
 /* 
  * user defined constant
@@ -72,24 +73,34 @@ int main(void){
 		_delay_ms(100);
 		PORTD = 0xCC;
 		_delay_ms(100);
-		_delay_ms(100);
 	}
 #endif
+	for(;;) {
+		sleep_mode();
+	}
 
 } /* end of main routine */
 
 
+void init_port(void){
+	DDRD = 0xFF;				/* PORTD: set 1 as output , all ports are output*/ 
+	PORTD = 0xAA;				/* set LED pattern */
+}
 
 #define T0_OVF	255 - 247			/* Timer 0 overflow value -> 1ms */
 void init_timer(void) {
 	/* Timer 0 setting */
 	TCCR0 = _BV(CS02) | _BV(CS00);		/* set prescaler 1/1024 */
 	TCNT0 = T0_OVF;				/* set overflow count */
-
 	TIMSK |= _BV(TOIE0);			/* set timer overflow interrupt enable */
 }
 
+static volatile uint8_t timer_count = 0;		/* count the timer upto 100 ms */
 ISR(TIMER0_OVF0_vect) {
 	TCNT0 = T0_OVF;
+	if (++timer_count >= 100) {
+		timer_count = 100;
+	}
+
 
 }
