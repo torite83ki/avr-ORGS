@@ -42,6 +42,7 @@ ISR(TIMER0_OVF0_vect);
  * sub routines
  */
 void init_port(void);
+void init_timer(void); 
 
 /*
  * sram static values
@@ -77,7 +78,18 @@ int main(void){
 
 } /* end of main routine */
 
-ISR(TIMER0_OVF0_vect) {
 
+
+#define T0_OVF	255 - 247			/* Timer 0 overflow value -> 1ms */
+void init_timer(void) {
+	/* Timer 0 setting */
+	TCCR0 = _BV(CS02) | _BV(CS00);		/* set prescaler 1/1024 */
+	TCNT0 = T0_OVF;				/* set overflow count */
+
+	TIMSK |= _BV(TOIE0);			/* set timer overflow interrupt enable */
+}
+
+ISR(TIMER0_OVF0_vect) {
+	TCNT0 = T0_OVF;
 
 }
