@@ -96,12 +96,12 @@ void init_timer(void) {
 	TIMSK |= _BV(TOIE0);			/* set timer overflow interrupt enable */
 }
 
-static volatile uint8_t timer_count = 0;		/* count the timer upto 100 ms */
-static volatile uint8_t timer_count_upperlimit = 100;		/* count the timer upto 100 ms */
+static volatile uint16_t counter_1ms = 0;		/* counter *1ms  */
+static volatile uint16_t counter_upperlimit = 500;		/* counter upper limit*/
 ISR(TIMER0_OVF0_vect) {
 	TCNT0 = T0_OVF;
-	if (++timer_count >= timer_count_upperlimit) {
-		timer_count = 0;
+	if (++counter_1ms >= counter_upperlimit) {
+		counter_1ms = 0;
 		PORTD = ~PIND;
 	}
 
