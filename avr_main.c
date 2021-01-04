@@ -11,7 +11,6 @@
  */
 
 
-#define DBUG	1	/* 1:Enalble/0:disable debug function */
 
 #include <avr/io.h>
 #include <stdio.h>
@@ -23,6 +22,9 @@
 /* 
  * user defined constant
  */
+
+#define DEBUG	1	/* 1:Enalble/0:disable debug function */
+
 /* led is connected as sink-source */
 #define LED1_PIN	2
 #define LED2_PIN	3
@@ -54,19 +56,17 @@ void init_timer(void);
 int main(void){
 
 	cli();
-//	init_timer();
+	init_timer();
 	init_port();
-
-	sei();
 
 /* debug */ 
 #ifdef DEBUG
-	DDRD  = 0xFF;
-	DDRB  = 0xFF;
-	PORTB = 0xF0;
-	PORTD = 0x00;
-
-	for(;;){
+	//DDRD  = 0xFF;
+	//DDRB  = 0xFF;
+	//PORTB = 0xF0;
+	//PORTD = 0x00;
+	uint8_t n;
+	for(n = 0;n < 5;n++){
 		PORTD = 0xAA;
 		_delay_ms(100);
 		_delay_ms(100);
@@ -75,6 +75,7 @@ int main(void){
 		_delay_ms(100);
 	}
 #endif
+	sei();
 	for(;;) {
 		sleep_mode();
 	}
@@ -87,7 +88,7 @@ void init_port(void){
 	PORTD = 0xAA;				/* set LED pattern */
 }
 
-#define T0_OVF	255 - 247			/* Timer 0 overflow value -> 1ms */
+#define T0_OVF	247			/* Timer 0 overflow value -> 1ms */
 void init_timer(void) {
 	/* Timer 0 setting */
 	TCCR0 = _BV(CS02) | _BV(CS00);		/* set prescaler 1/1024 */
@@ -99,7 +100,8 @@ static volatile uint8_t timer_count = 0;		/* count the timer upto 100 ms */
 ISR(TIMER0_OVF0_vect) {
 	TCNT0 = T0_OVF;
 	if (++timer_count >= 100) {
-		timer_count = 100;
+		timer_count = 0;
+		PORTD = ~PIND;
 	}
 
 
