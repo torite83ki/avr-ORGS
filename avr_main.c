@@ -97,9 +97,10 @@ void init_timer(void) {
 }
 
 static volatile uint8_t timer_count = 0;		/* count the timer upto 100 ms */
+static volatile uint8_t timer_count_upperlimit = 100;		/* count the timer upto 100 ms */
 ISR(TIMER0_OVF0_vect) {
 	TCNT0 = T0_OVF;
-	if (++timer_count >= 100) {
+	if (++timer_count >= timer_count_upperlimit) {
 		timer_count = 0;
 		PORTD = ~PIND;
 	}
