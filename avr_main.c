@@ -45,8 +45,9 @@ ISR(INT0_vect);
 /*
  * sub routines
  */
-void init_port(void);
-void init_timer(void); 
+void init_device(void);
+//void init_port(void);
+//void init_timer(void); 
 
 /*
  * sram static values
@@ -57,7 +58,7 @@ void init_timer(void);
 int main(void){
 
 	cli();
-	init_ios();
+	init_device();
 	//init_timer();
 	//init_port();
 
@@ -90,7 +91,7 @@ int main(void){
 
 /* initialize io peripherals */
 #define T0_OVF	247			/* Timer 0 overflow value -> 1ms */
-void init_ios(void) {
+void init_device(void) {
 
 	// io ports
 	DDRD = 0xFF;				/* PORTD: set 1 as output , all ports are output*/ 
