@@ -40,6 +40,7 @@
  * interrupt handlers
  */
 ISR(TIMER0_OVF0_vect);
+ISR(INT0_vect);
 
 /*
  * sub routines
@@ -56,8 +57,9 @@ void init_timer(void);
 int main(void){
 
 	cli();
-	init_timer();
-	init_port();
+	init_ios();
+	//init_timer();
+	//init_port();
 
 /* debug */ 
 #ifdef DEBUG
@@ -81,6 +83,31 @@ int main(void){
 	}
 
 } /* end of main routine */
+
+
+
+// sub routines
+
+/* initialize io peripherals */
+#define T0_OVF	247			/* Timer 0 overflow value -> 1ms */
+void init_ios(void) {
+
+	// io ports
+	DDRD = 0xFF;				/* PORTD: set 1 as output , all ports are output*/ 
+	PORTD = 0xAA;				/* set LED pattern */
+
+	// Timer 
+	/* Timer 0 setting */
+	TCCR0 = _BV(CS02) | _BV(CS00);		/* set prescaler 1/1024 */
+	TCNT0 = T0_OVF;				/* set overflow count */
+	TIMSK |= _BV(TOIE0);			/* set timer overflow interrupt enable */
+
+	// External INT
+	/* INT0 */
+	MCUCR = _BV(ISC01) | _BV(ISC00);		/* INT0 Rising edge to interrupt */
+	GIMSK = _BV(INT0);				/* Enable INT0 interrupt */
+
+}
 
 
 void init_port(void){
@@ -112,5 +139,6 @@ ISR(INT0_vect){
 	if(counter_upperlimit > 1000) {
 	       counter_upperlimit = 100;
 	}
+	sei();
 }
 
