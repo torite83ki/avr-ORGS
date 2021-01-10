@@ -46,21 +46,16 @@ ISR(INT0_vect);
  * sub routines
  */
 void init_device(void);
-//void init_port(void);
-//void init_timer(void); 
 
 /*
  * sram static values
  */
-//volatile uint16_t time_count;
 
 /* main routine for avr */
 int main(void){
 
 	cli();
 	init_device();
-	//init_timer();
-	//init_port();
 
 /* debug */ 
 #ifdef DEBUG
@@ -110,19 +105,6 @@ void init_device(void) {
 
 }
 
-
-void init_port(void){
-	DDRD = 0xFF;				/* PORTD: set 1 as output , all ports are output*/ 
-	PORTD = 0xAA;				/* set LED pattern */
-}
-
-#define T0_OVF	247			/* Timer 0 overflow value -> 1ms */
-void init_timer(void) {
-	/* Timer 0 setting */
-	TCCR0 = _BV(CS02) | _BV(CS00);		/* set prescaler 1/1024 */
-	TCNT0 = T0_OVF;				/* set overflow count */
-	TIMSK |= _BV(TOIE0);			/* set timer overflow interrupt enable */
-}
 
 static volatile uint16_t counter_ms = 0;		/* counter *ms  */
 static volatile uint16_t counter_upperlimit = 500;		/* counter upper limit*/
