@@ -105,3 +105,12 @@ ISR(TIMER0_OVF0_vect) {
 		PORTD = ~PIND;
 	}
 }
+
+ISR(INT0_vect){
+	cli();
+	count_upperlimit += 100;
+	if(counter_upperlimit > 1000) {
+	       counter_upperlimit = 100;
+	}
+}
+
