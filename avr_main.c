@@ -104,6 +104,4 @@ ISR(TIMER0_OVF0_vect) {
 		counter_1ms = 0;
 		PORTD = ~PIND;
 	}
-
-
 }
