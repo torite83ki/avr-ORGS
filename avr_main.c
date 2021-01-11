@@ -89,7 +89,9 @@ int main(void){
 void init_device(void) {
 
 	// io ports
-	DDRD = 0xFF;				/* PORTD: set 1 as output , all ports are output*/ 
+	DDRB = _BV(DDB0) | _BV(DDB1) | _BV(DDB2) | _BV(DDB3) | _BV(DDB4) | _BV(DDB5) | _BV(DDB6) | _BV(DDB7);				/* PORTB: set 1 as output , all ports are output*/ 
+	PORTB = 0xAA;				/* set LED pattern */
+	DDRD = _BV(DDD4) | _BV(DDD5) | _BV(DDD6);	/* PORTD: set 1 as output ,  port4, 5 and 6 are output*/ 
 	PORTD = 0xAA;				/* set LED pattern */
 
 	// Timer 
@@ -112,7 +114,7 @@ ISR(TIMER0_OVF0_vect) {
 	TCNT0 = T0_OVF;						/* set overflow value -> 1ms */
 	if (++counter_ms >= counter_upperlimit) {
 		counter_ms = 0;
-		PORTD = ~PIND;
+		PORTB = ~PINB;
 	}
 }
 
