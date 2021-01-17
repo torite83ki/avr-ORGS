@@ -285,7 +285,8 @@ AVRDUDE_PROGRAMMER = arduino
 #AVRDUDE_PORT = com1    # programmer connected to serial device
 #AVRDUDE_PORT = com1    # programmer connected to serial device
 #AVRDUDE_PORT = usb:200027253
-AVRDUDE_PORT = /dev/tty.usbserial-A7043RIW
+#AVRDUDE_PORT = /dev/tty.usbserial-A7043RIW
+AVRDUDE_PORT = /dev/tty.usbserial-A7043MRN
 
 AVRDUDE_WRITE_FLASH = -U flash:w:$(TARGET).hex
 #AVRDUDE_WRITE_EEPROM = -U eeprom:w:$(TARGET).eep

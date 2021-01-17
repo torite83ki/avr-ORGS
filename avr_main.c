@@ -23,7 +23,6 @@
  * user defined constant
  */
 
-#define DEBUG	1	/* 1:Enalble/0:disable debug function */
 
 /* led is connected as sink-source */
 #define LED1_PIN	2
@@ -55,25 +54,11 @@ void init_device(void);
 int main(void){
 
 	cli();
-	init_device();
+	//init_device();
 
-/* debug */ 
-#ifdef DEBUG
-	//DDRD  = 0xFF;
-	//DDRB  = 0xFF;
-	//PORTB = 0xF0;
-	//PORTD = 0x00;
-	uint8_t n;
-	for(n = 0;n < 5;n++){
-		PORTD = 0xAA;
-		_delay_ms(100);
-		_delay_ms(100);
-		_delay_ms(100);
-		PORTD = 0xCC;
-		_delay_ms(100);
-	}
-#endif
-	sei();
+#include	"raw_blink_4_debug.h"
+	
+	//sei();
 	for(;;) {
 		sleep_mode();
 	}
@@ -87,7 +72,6 @@ int main(void){
 /* initialize io peripherals */
 #define T0_OVF	247			/* Timer 0 overflow value -> 1ms */
 void init_device(void) {
-
 	// io ports
 	DDRB = _BV(DDB0) | _BV(DDB1) | _BV(DDB2) | _BV(DDB3) | _BV(DDB4) | _BV(DDB5) | _BV(DDB6) | _BV(DDB7);				/* PORTB: set 1 as output , all ports are output*/ 
 	PORTB = 0xAA;				/* set LED pattern */

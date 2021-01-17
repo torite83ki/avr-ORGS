@@ -17,8 +17,8 @@
 #define _RAW_BLINK_4_DEBUG_H_
 
 
-#define LED_PORT_DIR DDRD
-#define LED_PORT_DATA PORTD
+#define LED_PORT_DIR DDRB
+#define LED_PORT_DATA PORTB
 
 
 	// Initialize
@@ -35,7 +35,4 @@
 		LED_PORT_DATA = 0xCC;
 		_delay_ms(100);
 	}
-#endif
-
-
 #endif
